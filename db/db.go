@@ -7,12 +7,13 @@ import (
 
 	junocdc "github.com/alexanderbez/juno/codec"
 	"github.com/alexanderbez/juno/config"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
 	_ "github.com/lib/pq" // nolint
 	"github.com/rs/zerolog/log"
 	tmctypes "github.com/tendermint/tendermint/rpc/core/types"
 	tmtypes "github.com/tendermint/tendermint/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 )
 
 // Database defines a wrapper around a SQL database and implements functionality
@@ -25,9 +26,14 @@ type Database struct {
 // from config. It returns a database connection handle or an error if the
 // connection fails.
 func OpenDB(cfg config.Config) (*Database, error) {
+	sslMode := "require"
+	if cfg.DB.SSLMode != "" {
+		sslMode = cfg.DB.SSLMode
+	}
+
 	connStr := fmt.Sprintf(
-		"host=%s port=%d dbname=%s user=%s password=%s sslmode=require",
-		cfg.DB.Host, cfg.DB.Port, cfg.DB.Name, cfg.DB.User, cfg.DB.Password,
+		"host=%s port=%d dbname=%s user=%s password=%s sslmode=%s",
+		cfg.DB.Host, cfg.DB.Port, cfg.DB.Name, cfg.DB.User, cfg.DB.Password, sslMode,
 	)
 
 	db, err := sql.Open("postgres", connStr)
