@@ -141,7 +141,7 @@ func (db *Database) SetTx(tx sdk.TxResponse) (uint64, error) {
 	var id uint64
 
 	sqlStatement := `
-	INSERT INTO transaction (timestamp, gas_wanted, gas_used, height, txhash, tags, messages, fee, signatures, memo)
+	INSERT INTO transaction (timestamp, gas_wanted, gas_used, height, txhash, events, messages, fee, signatures, memo)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 	RETURNING id;
 	`
@@ -151,9 +151,9 @@ func (db *Database) SetTx(tx sdk.TxResponse) (uint64, error) {
 		return 0, fmt.Errorf("unsupported tx type: %T", tx.Tx)
 	}
 
-	tagsBz, err := junocdc.Codec.MarshalJSON(tx.Tags)
+	eventsBz, err := junocdc.Codec.MarshalJSON(tx.Events)
 	if err != nil {
-		return 0, fmt.Errorf("failed to JSON encode tx tags: %s", err)
+		return 0, fmt.Errorf("failed to JSON encode tx events: %s", err)
 	}
 
 	msgsBz, err := junocdc.Codec.MarshalJSON(stdTx.GetMsgs())
@@ -188,7 +188,7 @@ func (db *Database) SetTx(tx sdk.TxResponse) (uint64, error) {
 
 	err = db.QueryRow(
 		sqlStatement,
-		tx.Timestamp, tx.GasWanted, tx.GasUsed, tx.Height, tx.TxHash, string(tagsBz),
+		tx.Timestamp, tx.GasWanted, tx.GasUsed, tx.Height, tx.TxHash, string(eventsBz),
 		string(msgsBz), string(feeBz), string(sigsBz), stdTx.GetMemo(),
 	).Scan(&id)
 
