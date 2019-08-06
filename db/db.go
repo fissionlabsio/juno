@@ -209,7 +209,7 @@ func (db *Database) ExportBlock(b *tmctypes.ResultBlock, txs []sdk.TxResponse, v
 	val := findValidatorByAddr(proposerAddr, vals)
 	if val == nil {
 		err := fmt.Errorf("failed to find validator by address %s for block %d", proposerAddr, b.Block.Height)
-		log.Info().Err(err)
+		log.Error().Str("validator", proposerAddr).Int64("height", b.Block.Height).Msg("failed to find validator by address")
 		return err
 	}
 
@@ -218,15 +218,13 @@ func (db *Database) ExportBlock(b *tmctypes.ResultBlock, txs []sdk.TxResponse, v
 	}
 
 	if _, err := db.SetBlock(b, totalGas, preCommits); err != nil {
-		err = fmt.Errorf("failed to persist block %d: %s", b.Block.Height, err)
-		log.Info().Err(err)
+		log.Error().Err(err).Int64("height", b.Block.Height).Msg("failed to persist block")
 		return err
 	}
 
 	for _, tx := range txs {
 		if _, err := db.SetTx(tx); err != nil {
-			err = fmt.Errorf("failed to persist transaction %s: %s", tx.TxHash, err)
-			log.Info().Err(err)
+			log.Error().Err(err).Str("hash", tx.TxHash).Msg("failed to persist transaction")
 			return err
 		}
 	}
@@ -242,14 +240,12 @@ func (db *Database) ExportValidator(val *tmtypes.Validator) error {
 
 	consPubKey, err := sdk.Bech32ifyConsPub(val.PubKey) // nolint: typecheck
 	if err != nil {
-		err = fmt.Errorf("failed to convert validator public key %s: %s", valAddr, err)
-		log.Info().Err(err)
+		log.Error().Err(err).Str("validator", valAddr).Msg("failed to convert validator public key")
 		return err
 	}
 
 	if err := db.SetValidator(valAddr, consPubKey); err != nil {
-		err = fmt.Errorf("failed to persist validator %s: %s", valAddr, err)
-		log.Info().Err(err)
+		log.Error().Err(err).Str("validator", valAddr).Msg("failed to persist validator")
 		return err
 	}
 
@@ -268,7 +264,7 @@ func (db *Database) ExportPreCommits(commit *tmtypes.Commit, vals *tmctypes.Resu
 			val := findValidatorByAddr(valAddr, vals)
 			if val == nil {
 				err := fmt.Errorf("failed to find validator by address %s for block %d", valAddr, commit.Height())
-				log.Info().Err(err)
+				log.Error().Msg(err.Error())
 				return err
 			}
 
@@ -277,8 +273,7 @@ func (db *Database) ExportPreCommits(commit *tmtypes.Commit, vals *tmctypes.Resu
 			}
 
 			if _, err := db.SetPreCommit(pc, val.VotingPower, val.ProposerPriority); err != nil {
-				err = fmt.Errorf("failed to persist pre-commit for validator %s: %s", valAddr, err)
-				log.Info().Err(err)
+				log.Error().Err(err).Str("validator", valAddr).Msg("failed to persist validator pre-commit")
 				return err
 			}
 		}
