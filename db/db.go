@@ -90,7 +90,7 @@ func (db *Database) SetValidator(addr, pk string) error {
 	return err
 }
 
-// SetValidatorset saves the validatorset for each block height. An error is
+// SetValSet saves the validatorset for each block height. An error is
 // returned if the operation fails.
 func (db *Database) SetValSet(val *tmtypes.Validator, height int64) (int64, error) {
 	addr := val.Address.String()
