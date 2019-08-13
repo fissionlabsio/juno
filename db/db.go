@@ -92,32 +92,26 @@ func (db *Database) SetValidator(addr, pk string) error {
 
 // SetValidatorset saves the validatorset for each block height. An error is
 // returned if the operation fails.
-func (db *Database) SetValidatorset(vals *tmctypes.ResultValidators) error {
-	height := vals.BlockHeight
-	for _, val := range vals.Validators {
-		addr := val.Address.String()
-		pubkey, err := sdk.Bech32ifyConsPub(val.PubKey) // nolint: typecheck
-		if err != nil {
-			fmt.Errorf("failed to convert validator public key %s: %s\n", val.PubKey, err)
-		}
-		proposer_priority := val.ProposerPriority
-		voting_power := val.VotingPower
-
-		sqlStatement := `
-		INSERT INTO validatorsets (height, address, pubkey, priority, voting_power) VALUES ($1, $2, $3, $4, $5)
-		ON CONFLICT DO NOTHING RETURNING height;
-		`
-
-		_, err = db.Exec(
-			sqlStatement,
-			height, addr, pubkey, proposer_priority, voting_power,
-		)
-		if err != nil {
-			return err
-		}
+func (db *Database) SetValSet(val *tmtypes.Validator, height int64) (int64, error) {
+	addr := val.Address.String()
+	pubkey, err := sdk.Bech32ifyConsPub(val.PubKey) // nolint: typecheck
+	if err != nil {
+		fmt.Errorf("failed to convert validator public key %s: %s\n", val.PubKey, err)
 	}
+	proposer_priority := val.ProposerPriority
+	voting_power := val.VotingPower
 
-	return nil
+	sqlStatement := `
+	INSERT INTO validatorsets (height, address, pubkey, priority, voting_power) VALUES ($1, $2, $3, $4, $5)
+	ON CONFLICT DO NOTHING RETURNING height;
+	`
+
+	err = db.QueryRow(
+		sqlStatement,
+		height, addr, pubkey, proposer_priority, voting_power,
+	).Scan(&height)
+
+	return height, err
 }
 
 // SetPreCommit stores a validator's pre-commit and returns the resulting record
@@ -247,13 +241,16 @@ func (db *Database) ExportBlock(b *tmctypes.ResultBlock, txs []sdk.TxResponse, v
 		return err
 	}
 
-	if err := db.SetValidatorset(vals); err != nil {
-		return err
-	}
-
 	if _, err := db.SetBlock(b, totalGas, preCommits); err != nil {
 		log.Error().Err(err).Int64("height", b.Block.Height).Msg("failed to persist block")
 		return err
+	}
+
+	height := b.Block.Height
+	for _, val := range vals.Validators {
+		if _, err := db.SetValSet(val, height); err != nil {
+			return err
+		}
 	}
 
 	for _, tx := range txs {
