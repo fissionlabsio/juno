@@ -59,7 +59,7 @@ ci-test:
 
 ci-lint: tools
 	@echo "Running GolangCI-Lint..."
-	@golangci-lint run
+	@GO111MODULE=on golangci-lint run
 	@echo "Formatting..."
 	@find . -name '*.go' -type f -not -path "*.git*" | xargs gofmt -d -s
 	@echo "Verifying modules..."
