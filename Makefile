@@ -1,11 +1,11 @@
 VERSION               := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT                := $(shell git log -1 --format='%H')
 TOOLS_DESTDIR         ?= $(GOPATH)/bin
-# GOLANGCI_LINT         = $(TOOLS_DESTDIR)/golangci-lint
-# GOLANGCI_LINT_HASHSUM := 8d21cc95da8d3daf8321ac40091456fc26123c964d7c2281d339d431f2f4c840
+GOLANGCI_LINT         = $(TOOLS_DESTDIR)/golangci-lint
+GOLANGCI_LINT_HASHSUM := 8d21cc95da8d3daf8321ac40091456fc26123c964d7c2281d339d431f2f4c840
 
-# mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-# mkfile_dir 	:= $(dir $(mkfile_path))
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+mkfile_dir 	:= $(dir $(mkfile_path))
 
 all: ci-lint ci-test install
 
@@ -35,15 +35,15 @@ install: go.sum
 # Tools
 ###############################################################################
 
-# tools-stamp: $(GOLANGCI_LINT)
-# 	@touch $@
+tools-stamp: $(GOLANGCI_LINT)
+	@touch $@
 
-# tools: tools-stamp
+tools: tools-stamp
 
-# # golangci-lint: $(GOLANGCI_LINT)
-# # $(GOLANGCI_LINT): $(mkfile_dir)/contrib/install-golangci-lint.sh
-# # 	@echo "installing golangci-lint..."
-# # 	@bash $(mkfile_dir)/contrib/install-golangci-lint.sh $(TOOLS_DESTDIR) $(GOLANGCI_LINT_HASHSUM)
+golangci-lint: $(GOLANGCI_LINT)
+$(GOLANGCI_LINT): $(mkfile_dir)/contrib/install-golangci-lint.sh
+	@echo "installing golangci-lint..."
+	@bash $(mkfile_dir)/contrib/install-golangci-lint.sh $(TOOLS_DESTDIR) $(GOLANGCI_LINT_HASHSUM)
 
 ###############################################################################
 # Tests / CI
@@ -68,4 +68,4 @@ ci-lint:
 clean:
 	rm -f tools-stamp ./build/**
 
-.PHONY: install build ci-test ci-lint coverage clean
+.PHONY: install build ci-test ci-lint tools tools-stamp coverage clean
