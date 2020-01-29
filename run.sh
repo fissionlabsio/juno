@@ -14,9 +14,10 @@ docker exec -ti juno_postgres psql -f /root/schema/block.sql -d $POSTGRES_DB_NAM
 docker exec -ti juno_postgres psql -f /root/schema/transaction.sql -d $POSTGRES_DB_NAME -U $POSTGRES_USER_NAME
 
 # create docker.config.toml, put values from .env file to config.toml
-echo -n 'rpc_url="' >> config.toml && echo -n $RPC_URL >> config.toml && echo -n '"' >> config.toml
+echo -n 'rpc_node="' >> config.toml && echo -n $RPC_URL >> config.toml && echo -n '"' >> config.toml
 sed -i "/rpc/a client_node=\"$CLIENT_URL\"" config.toml
-echo '[database]' >> config.toml && echo '' >> config.toml
+echo >> config.toml
+echo '[database]' >> config.toml
 sed -i "/database/a host=\"$POSTGRES_DB_HOST\"" config.toml
 sed -i "/host/a port=$POSTGRES_DB_PORT" config.toml
 sed -i "/port/a name=\"$POSTGRES_DB_NAME\"" config.toml
