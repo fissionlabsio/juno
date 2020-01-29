@@ -14,7 +14,7 @@ cat sample.config.toml >> config.toml
 sed -i "/#1/a rpc_node=\"$RPC_URL\"" config.toml
 sed -i "/rpc/a client_node=\"$LCD_URL\"" config.toml
 sed -i "/database/a host=\"$POSTGRES_DB_HOST\"" config.toml
-sed -i "/host/a port=\"$POSTGRES_DB_PORT\"" config.toml
+sed -i "/host/a port=$POSTGRES_DB_PORT" config.toml
 sed -i "/port/a name=\"$POSTGRES_DB_NAME\"" config.toml
 sed -i "/name/a user=\"$POSTGRES_USER_NAME\"" config.toml
 sed -i "/user/a password=\"$POSTGRES_DB_PASSWORD\"" config.toml
