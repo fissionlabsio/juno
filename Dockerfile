@@ -14,4 +14,4 @@ COPY . .
 
 RUN go build
 
-CMD ./juno config.toml --workers $JUNO_WORKERS_NUMBER
+CMD ./juno docker.config.toml --workers $JUNO_WORKERS_NUMBER
