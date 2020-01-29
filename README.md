@@ -54,6 +54,15 @@ To install the binary run `make install`.
 
 **Note**: Requires [Go 1.13+](https://golang.org/dl/)
 
+## Running in docker
+
+- Open and fill `.env` file with all necessary data
+- Run `run.sh`
+
+Script will deploy Postgres, Hasura and Juno in docker containers.
+
+**Note** Not necessary to create `config.toml` for docker installation, it would be generated automatically form `.env` file.
+
 ## Usage
 
 Juno internally runs a single worker that consumes from a single queue. The

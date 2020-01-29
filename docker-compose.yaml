@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+    postgres:
+        image: postgres:latest
+        restart: always
+        container_name: juno_postgres
+        volumes:
+            - ./postgres:/var/lib/postgresql/data
+            - ./schema:/root/schema
+        environment:
+            - POSTGRES_DB=${POSTGRES_DB_NAME}
+            - POSTGRES_USER=${POSTGRES_USER_NAME}
+            - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
+        networks:
+            juno-net:
+                ipv4_address: 172.28.1.2
+        ports:
+            - 127.0.0.1:${POSTGRES_DB_PORT}:5432
+    graphql-engine:
+        image: hasura/graphql-engine:latest
+        restart: always
+        container_name: juno_hasura
+        depends_on:
+            - "postgres"
+        environment:
+            HASURA_GRAPHQL_DATABASE_URL: postgres://${POSTGRES_USER_NAME}:${POSTGRES_DB_PASSWORD}@172.28.1.2:5432/${POSTGRES_DB_NAME}
+            HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+            HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+            HASURA_GRAPHQL_ADMIN_SECRET: $HASURA_ADMIN_SECRET
+        networks:
+            juno-net:
+                ipv4_address: 172.28.1.3
+        ports:
+            - 127.0.0.1:${HASURA_PORT}:8080
+
+networks:
+  juno-net:
+    driver: bridge
+    ipam:
+        driver: default
+        config:
+            - subnet: 172.28.1.0/24
