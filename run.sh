@@ -9,7 +9,6 @@ docker exec -ti juno_postgres psql -f /root/schema/validator.sql -d $POSTGRES_DB
 docker exec -ti juno_postgres psql -f /root/schema/pre_commit.sql -d $POSTGRES_DB_NAME -U $POSTGRES_USER_NAME
 docker exec -ti juno_postgres psql -f /root/schema/block.sql -d $POSTGRES_DB_NAME -U $POSTGRES_USER_NAME
 docker exec -ti juno_postgres psql -f /root/schema/transaction.sql -d $POSTGRES_DB_NAME -U $POSTGRES_USER_NAME
-docker exec -ti juno_postgres psql -f /root/schema/link.sql -d $POSTGRES_DB_NAME -U $POSTGRES_USER_NAME
 #create config.toml, put values from .env file to config.toml
 cat sample.config.toml >> config.toml
 sed -i "/#1/a rpc_node=\"$RPC_URL\"" config.toml
