@@ -8,13 +8,13 @@
 
 ## Table of Contents
 
-  - [Background](#background)
-  - [Install](#install)
-  - [Usage](#usage)
-  - [Schemas](#schemas)
-  - [Future Improvements](#future-improvements)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [Schemas](#schemas)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Background
 
@@ -77,7 +77,7 @@ In addition, it will also sync missing blocks from `--start-height` to the lates
 known height.
 
 ```shell
-$ juno /path/to/config.toml [flags]
+~$ juno /path/to/config.toml [flags]
 ```
 
 ## Schemas
