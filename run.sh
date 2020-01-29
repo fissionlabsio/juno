@@ -22,3 +22,5 @@ sed -i "/password/a ssl_mode=\"$JUNO_SSL_MODE\"" config.toml
 #build juno and run it in container
 docker build -t juno:latest --build-arg JUNO_WORKERS_NUMBER=$JUNO_WORKERS_NUMBER .
 docker run -d --name juno --network="host" juno:latest
+# remove config toml, as far as it copyed to container
+rm config.toml
