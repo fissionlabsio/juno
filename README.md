@@ -57,11 +57,11 @@ To install the binary run `make install`.
 ## Running in docker
 
 - Open and fill `.env` file with all necessary data
-- Run `run.sh`
+- To install in docker run `make docker`.
 
-Script will deploy Postgres, Hasura and Juno in docker containers.
+Juno, Hasura and Postgres would be deployed in docker containers.
 
-**Note** Not necessary to create `config.toml` for docker installation, it would be generated automatically form `.env` file.
+**Note** Not necessary to create `config.toml` for docker installation, it would be generated automatically from `.env` file.
 
 ## Usage
 
