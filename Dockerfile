@@ -6,12 +6,8 @@ ENV JUNO_WORKERS_NUMBER=${JUNO_WORKERS_NUMBER}
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
-
-RUN go mod download
-
 COPY . .
 
-RUN go build
+RUN make install
 
-CMD ./juno config.toml --workers $JUNO_WORKERS_NUMBER
+CMD juno config.toml --workers $JUNO_WORKERS_NUMBER
