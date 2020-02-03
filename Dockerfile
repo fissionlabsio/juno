@@ -1,0 +1,13 @@
+FROM golang:latest
+
+ARG JUNO_WORKERS_NUMBER=1
+
+ENV JUNO_WORKERS_NUMBER=${JUNO_WORKERS_NUMBER}
+
+WORKDIR /app
+
+COPY . .
+
+RUN make install
+
+CMD juno config.toml --workers $JUNO_WORKERS_NUMBER

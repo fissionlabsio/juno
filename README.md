@@ -8,13 +8,13 @@
 
 ## Table of Contents
 
-  - [Background](#background)
-  - [Install](#install)
-  - [Usage](#usage)
-  - [Schemas](#schemas)
-  - [Future Improvements](#future-improvements)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [Schemas](#schemas)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Background
 
@@ -53,6 +53,32 @@ ssl_mode = "<ssl-mode>"
 To install the binary run `make install`.
 
 **Note**: Requires [Go 1.13+](https://golang.org/dl/)
+
+## Running in docker
+
+- Open and fill `.env` file with all necessary data
+- To install in docker run `make docker`.
+
+Juno, Hasura and Postgres would be deployed in docker containers.
+
+**Note** Not necessary to create `config.toml` for docker installation, it would be generated automatically from `.env` file.
+
+Example of .env file:
+
+```toml
+POSTGRES_DB_FOLDER=/home/user/postgres
+POSTGRES_DB_HOST=localhost
+POSTGRES_DB_PORT=5235
+POSTGRES_DB_NAME=juno-postgres
+POSTGRES_USER_NAME=juno
+POSTGRES_DB_PASSWORD=1234juno4321
+HASURA_PORT=8080
+HASURA_ADMIN_SECRET=1234goodpasscode4321
+JUNO_SSL_MODE=disable
+JUNO_WORKERS_NUMBER=4
+RPC_URL=http://my.gaia-node.ai/rpc/
+CLIENT_URL=http://client.my.gaia-node.ai/
+```
 
 ## Usage
 
