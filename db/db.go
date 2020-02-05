@@ -169,7 +169,7 @@ func (db *Database) SetTx(tx sdk.TxResponse) (uint64, error) {
 	// convert Tendermint signatures into a more human-readable format
 	sigs := make([]signature, len(stdTx.GetSignatures()), len(stdTx.GetSignatures()))
 	for i, sig := range stdTx.GetSignatures() {
-		consPubKey, err := sdk.Bech32ifyConsPub(sig.PubKey) // nolint: typecheck
+		pubkey, err := sdk.Bech32ifyAccPub(sig.PubKey) // nolint: typecheck
 		if err != nil {
 			return 0, fmt.Errorf("failed to convert validator public key %s: %s\n", sig.PubKey, err)
 		}
@@ -177,7 +177,7 @@ func (db *Database) SetTx(tx sdk.TxResponse) (uint64, error) {
 		sigs[i] = signature{
 			Address:   sig.Address().String(),
 			Signature: base64.StdEncoding.EncodeToString(sig.Signature),
-			Pubkey:    consPubKey,
+			Pubkey:    pubkey,
 		}
 	}
 
