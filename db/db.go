@@ -229,7 +229,7 @@ func (db *Database) ExportBlock(b *tmctypes.ResultBlock, txs []sdk.TxResponse, v
 
 	for _, tx := range txs {
 		if _, err := db.SetTx(tx); err != nil {
-			log.Error().Err(err).Str("hash", tx.TxHash).Msg("failed to persist transaction")
+			log.Error().Err(err).Int64("height", b.Block.Height).Str("hash", tx.TxHash).Msg("failed to persist transaction")
 			return err
 		}
 	}
