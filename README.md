@@ -30,8 +30,8 @@ it even further eases the ability for developers and downstream clients to answe
 queries such as "what is the average gas cost of a block?" while also allowing
 them to compose more aggregate and complex queries.
 
-Juno currently supports the Cosmos SDK [v0.37.4](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.37.4). In addition, Fission Labs publishs a public GraphQL API for `cosmoshub-3` that
-can be found [here](https://gaiaql.fissionlabs.io/).
+> 🎉 Fission Labs publishes a public GraphQL API for the Cosmos Hub that
+> can be found [here](https://gaiaql.fissionlabs.io/) 🎉
 
 ## Versions
 
