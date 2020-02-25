@@ -8,7 +8,10 @@
 
 ## Table of Contents
 
+- [Juno](#juno)
+  - [Table of Contents](#table-of-contents)
   - [Background](#background)
+  - [Versions](#versions)
   - [Install](#install)
   - [Usage](#usage)
   - [Schemas](#schemas)
@@ -29,6 +32,15 @@ them to compose more aggregate and complex queries.
 
 Juno currently supports the Cosmos SDK [v0.37.4](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.37.4). In addition, Fission Labs publishs a public GraphQL API for `cosmoshub-3` that
 can be found [here](https://gaiaql.fissionlabs.io/).
+
+## Versions
+
+- v0.0.5 - v0.0.6
+  - Network: cosmoshub-3
+- v0.0.4
+  - Network: cosmoshub-2
+- v0.0.1 - v0.0.3:
+  - Network: cosmoshub-1
 
 ## Install
 
