@@ -106,4 +106,4 @@ Contributions are welcome! Please open an Issues or Pull Request for any changes
 
 ## License
 
-[CCC0 1.0 Universal](https://creativecommons.org/share-your-work/public-domain/cc0/)
+[MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/FAQ/)
